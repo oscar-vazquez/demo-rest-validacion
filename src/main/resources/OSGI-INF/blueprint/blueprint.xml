@@ -18,11 +18,23 @@
             <bean class="edesur.demo.HelloService" />
         </jaxrs:serviceBeans>
         <jaxrs:providers>
-           <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+            <bean class="edesur.demo.MyValidationExceptionMapper">
+                <property name="addMessageToResponse" value="true" />
+            </bean>
+            <!--
+            <bean class="org.apache.cxf.jaxrs.validation.ValidationExceptionMapper">
+            </bean>
+            -->
         </jaxrs:providers>
         <jaxrs:features>
-            <ref bean="commonValidationFeature" />
+            <bean class="org.apache.cxf.validation.BeanValidationFeature">
+                <property name="provider" ref="beanValidationProvider"/>
+            </bean>
         </jaxrs:features>
+        <!--
+            <ref bean="commonValidationFeature" />
+        -->
     </jaxrs:server>
  
     <cxf:bus>
@@ -38,9 +50,11 @@
         </cxf:properties>
     </cxf:bus>
 
+    <!--
     <bean id="commonValidationFeature" class="org.apache.cxf.validation.BeanValidationFeature">
         <property name="provider" ref="beanValidationProvider"/>
     </bean>
+    -->
 
     <bean id="beanValidationProvider" class="org.apache.cxf.validation.BeanValidationProvider">
         <argument ref="validationProviderResolver" />

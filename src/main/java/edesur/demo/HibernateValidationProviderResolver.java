@@ -3,6 +3,8 @@ package edesur.demo;
 import static java.util.Collections.singletonList;
 import org.hibernate.validator.HibernateValidator;
 import javax.validation.ValidationProviderResolver;
+import javax.validation.spi.ValidationProvider;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -12,9 +14,10 @@ import java.util.List;
  *
  */
 public class HibernateValidationProviderResolver implements ValidationProviderResolver {
-
     @Override
-    public List getValidationProviders() {
-        return singletonList(new HibernateValidator());
+    public List<ValidationProvider<?>> getValidationProviders() {
+        List<ValidationProvider<?>> list = new ArrayList<>(1);
+        list.add(new HibernateValidator());
+        return list;
     }
 }

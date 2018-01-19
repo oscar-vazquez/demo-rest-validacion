@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -29,9 +30,12 @@ public class HelloService {
     @GET
     @Path("{name}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String helloYou(@PathParam("name")String nombre) {
+    @Valid @NotNull
+    public Response helloYou(@NotNull @PathParam("name")String nombre) {
         logger.info("GET Hello {}", nombre);
-        return "Hello " + nombre;
+        HelloResponse response = new HelloResponse();
+        response.setMensaje("Hola " + nombre);
+        return Response.ok(response).build();
     }
 
     /*
@@ -45,6 +49,7 @@ public class HelloService {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @Valid @NotNull
     public Response helloPost(@Valid HelloRequest request) {
         logger.info("POST Hello {} {}", request.getNombre(), request.getApellido());
         HelloResponse response = new HelloResponse();
